@@ -5,7 +5,7 @@ import java.io.File;
 import static org.example.EntradaDatos.preguntar;
 
 public class Main {
-    static void main() {
+    public static void main(String[] args) {
         System.out.println("Gestión de Biblioteca\n" +
                 "---------------------");
 
