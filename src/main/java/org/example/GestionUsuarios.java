@@ -12,6 +12,7 @@ public class GestionUsuarios {
                 "4) Eliminar Usuario\n" +
                 "5) Menu Principal";
 
+        // Bucle de selección de acciones de menú.
         int opcion = -1;
         while (opcion != 5) {
             System.out.print("\n\n" + MENU_USUARIO + "\n\nOpción: ");

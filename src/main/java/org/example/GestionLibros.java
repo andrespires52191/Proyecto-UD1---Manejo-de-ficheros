@@ -12,6 +12,7 @@ public class GestionLibros {
                 "4) Eliminar Libro\n" +
                 "5) Menu Principal";
 
+        // Bucle de selección de acciones de menú.
         int opcion = -1;
         while (opcion != 5) {
             System.out.print("\n\n" + MENU_LIBROS + "\n\nOpción: ");

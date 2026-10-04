@@ -21,9 +21,10 @@ public class Main {
                 "3) Gestionar Préstamos\n" +
                 "4) Salir";
 
+        // Bucle de selección de acciones de menú.
         int opcion = -1;
         while (opcion != 4) {
-            System.out.print("\n\n" + MENU_PRINCIPAL + "\n\nOpción: ");
+            System.out.print("\n" + MENU_PRINCIPAL + "\n\nOpción: ");
 
             try {
                 opcion = Integer.parseInt(scanner.nextLine());
