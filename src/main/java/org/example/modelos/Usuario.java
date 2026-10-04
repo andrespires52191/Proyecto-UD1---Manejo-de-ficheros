@@ -48,6 +48,6 @@ public class Usuario implements Serializable {
 
     @Override
     public String toString() {
-        return nombre + " (" + edad + " años, DNI " + dni + ")";
+        return "#" + usuarioId + ": " + nombre + " (" + edad + " años, DNI " + dni + ")";
     }
 }

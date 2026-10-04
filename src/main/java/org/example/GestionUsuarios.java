@@ -57,6 +57,11 @@ public class GestionUsuarios {
     }
 
     private boolean cargarFicheroUsuarios() {
+        if (!fichero.exists()) {
+            // nada que cargar
+            return true;
+        }
+
         try {
             // abrir archivo
             FileInputStream fis = new FileInputStream(fichero);
