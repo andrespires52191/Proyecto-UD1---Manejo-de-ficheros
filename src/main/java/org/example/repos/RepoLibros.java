@@ -17,7 +17,7 @@ public class RepoLibros {
     static File fichero = new File("ficheros/libros.xml");
     static ListaLibros libros = new ListaLibros();
 
-    public boolean cargarFicheroLibros() {
+    public boolean cargarFichero() {
         if (!fichero.exists()) {
             // nada que cargar
             return true;
@@ -45,7 +45,7 @@ public class RepoLibros {
         return false;
     }
 
-    public boolean guardarFicheroLibros() {
+    public boolean guardarFichero() {
         try {
             // cambiar de nombre a las etiquetas XML
             xstream.alias("ListaLibros", ListaLibros.class);
@@ -86,4 +86,16 @@ public class RepoLibros {
         return getLista().remove(libro);
     }
 
+    public Libro buscarLibro(Libro libro) {
+        for (Libro l : getLista()) {
+            // buscar primera coincidencia
+            if (l.getTitulo().equals(libro.getTitulo())
+                    && l.getAutor().equals(libro.getAutor())
+                    && l.getAnyo() == libro.getAnyo()
+            ) {
+                return l;
+            }
+        }
+        return null;
+    }
 }

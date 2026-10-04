@@ -17,7 +17,7 @@ public class RepoPrestamos {
     static File fichero = new File("ficheros/prestamos.json");
     static ListaPrestamos prestamos = new ListaPrestamos();
 
-    public boolean cargarFicheroPrestamos() {
+    public boolean cargarFichero() {
         if (!fichero.exists()) {
             // nada que cargar
             return true;
@@ -46,7 +46,7 @@ public class RepoPrestamos {
         return false;
     }
 
-    public boolean guardarFicheroPrestamos() {
+    public boolean guardarFichero() {
         // convertir lista a json
         String json = gson.toJson(prestamos);
         try {
@@ -87,5 +87,23 @@ public class RepoPrestamos {
 
     public void remove(Prestamo prestamo) {
         prestamos.getLista().remove(prestamo);
+    }
+
+    public Prestamo buscarPorId(int prestamoId) {
+        for (Prestamo p : getLista()) {
+            if (p.getPrestamoId() == prestamoId) {
+                return p;
+            }
+        }
+        return null;
+    }
+
+    public Prestamo buscarPorUsuarioYLibro(int usuarioID, int libroID) {
+        for (Prestamo p : getLista()) {
+            if (p.getUsuarioId() == usuarioID && p.getLibroId() == libroID) {
+                return p;
+            }
+        }
+        return null;
     }
 }

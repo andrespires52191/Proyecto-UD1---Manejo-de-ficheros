@@ -1,7 +1,7 @@
 package org.example.modelos;
 
 public class Libro {
-    int libroId;
+    int libroId = -1;
     String titulo;
     String autor;
     int anyo;

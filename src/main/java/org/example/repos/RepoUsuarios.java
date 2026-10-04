@@ -11,7 +11,7 @@ public class RepoUsuarios {
     static File fichero = new File("ficheros/usuarios.dat");
     static List<Usuario> usuarios = new ArrayList<>();
 
-    public boolean cargarFicheroUsuarios() {
+    public boolean cargarFichero() {
         if (!fichero.exists()) {
             // nada que cargar
             return true;
@@ -48,7 +48,7 @@ public class RepoUsuarios {
         return false;
     }
 
-    public boolean guardarFicheroUsuarios() {
+    public boolean guardarFichero() {
         try {
             // abrir archivo
             FileOutputStream fos = new FileOutputStream(fichero);
@@ -91,5 +91,14 @@ public class RepoUsuarios {
 
     public void remove(Usuario usuario) {
         getLista().remove(usuario);
+    }
+
+    public Usuario buscarPorDni(String dni) {
+        for (Usuario u : getLista()) {
+            if (u.getDni().equalsIgnoreCase(dni)) {
+                return u;
+            }
+        }
+        return null;
     }
 }

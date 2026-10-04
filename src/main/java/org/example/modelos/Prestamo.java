@@ -1,9 +1,7 @@
 package org.example.modelos;
 
-import java.io.Serializable;
-
-public class Prestamo implements Serializable {
-    int prestamoId;
+public class Prestamo {
+    int prestamoId = -1;
     int usuarioId;
     int libroId;
     String fechaIni;

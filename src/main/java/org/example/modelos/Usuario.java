@@ -3,7 +3,7 @@ package org.example.modelos;
 import java.io.Serializable;
 
 public class Usuario implements Serializable {
-    int usuarioId;
+    int usuarioId = -1;
     String nombre;
     String dni;
     int edad;

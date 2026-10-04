@@ -30,7 +30,7 @@ public class GestionPrestamos {
                 "5) Menu Principal";
 
 
-        if (!repoPrestamos.cargarFicheroPrestamos()) {
+        if (!repoPrestamos.cargarFichero()) {
             System.out.println("Error: Fallo al cargar préstamos.");
             return;
         }
@@ -66,24 +66,6 @@ public class GestionPrestamos {
         }
     }
 
-    private Prestamo buscarPrestamoPorId(int prestamoId) {
-        for (Prestamo p : repoPrestamos.getLista()) {
-            if (p.getPrestamoId() == prestamoId) {
-                return p;
-            }
-        }
-        return null;
-    }
-
-    private Prestamo buscarPrestamoPorUsuarioYLibro(int usuarioID, int libroID) {
-        for (Prestamo p : repoPrestamos.getLista()) {
-            if (p.getUsuarioId() == usuarioID && p.getLibroId() == libroID) {
-                return p;
-            }
-        }
-        return null;
-    }
-
     private void verPrestamos() {
         System.out.println("Resultados:");
         for (Prestamo p : repoPrestamos.getLista()) {
@@ -111,7 +93,7 @@ public class GestionPrestamos {
         Prestamo prestamoNuevo = new Prestamo(usuarioId, libroID, fechaIni, fechaFin);
 
         // buscar prestamos repetidos
-        Prestamo prestamoExistente = buscarPrestamoPorUsuarioYLibro(usuarioId, libroID);
+        Prestamo prestamoExistente = repoPrestamos.buscarPorUsuarioYLibro(usuarioId, libroID);
         if (prestamoExistente != null) {
             System.out.println("El préstamo ya existe.");
             return;
@@ -122,7 +104,7 @@ public class GestionPrestamos {
         repoPrestamos.add(prestamoNuevo);
 
         // volcar memoria a archivo
-        if (repoPrestamos.guardarFicheroPrestamos()) {
+        if (repoPrestamos.guardarFichero()) {
             System.out.println("Préstamo guardado correctamente.");
         }
     }
@@ -138,7 +120,7 @@ public class GestionPrestamos {
         }
 
         // buscar libro en memoria
-        Prestamo prestamo = buscarPrestamoPorId(prestamoId);
+        Prestamo prestamo = repoPrestamos.buscarPorId(prestamoId);
         if (prestamo == null) {
             System.out.println("El préstamo no existe.");
             return;
@@ -154,7 +136,7 @@ public class GestionPrestamos {
         prestamo.setFechaFin(fechaFin);
 
         // volcar a archivo
-        if (repoPrestamos.guardarFicheroPrestamos()) {
+        if (repoPrestamos.guardarFichero()) {
             System.out.println("Préstamo editado correctamente.");
         }
     }
@@ -170,7 +152,7 @@ public class GestionPrestamos {
         }
 
         // buscar libro en memoria
-        Prestamo prestamo = buscarPrestamoPorId(prestamoId);
+        Prestamo prestamo = repoPrestamos.buscarPorId(prestamoId);
         if (prestamo == null) {
             System.out.println("El préstamo no existe.");
             return;
@@ -180,7 +162,7 @@ public class GestionPrestamos {
         repoPrestamos.remove(prestamo);
 
         // volcar a archivo
-        if (repoPrestamos.guardarFicheroPrestamos()) {
+        if (repoPrestamos.guardarFichero()) {
             System.out.println("Préstamo editado correctamente.");
         }
     }

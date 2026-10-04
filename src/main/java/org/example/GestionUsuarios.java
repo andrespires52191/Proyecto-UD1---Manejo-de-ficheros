@@ -20,7 +20,7 @@ public class GestionUsuarios {
                 "4) Eliminar Usuario\n" +
                 "5) Menu Principal";
 
-        if (!repoUsuarios.cargarFicheroUsuarios()) {
+        if (!repoUsuarios.cargarFichero()) {
             System.out.println("Error: Fallo al cargar usuarios.");
             return;
         }
@@ -56,16 +56,6 @@ public class GestionUsuarios {
         }
     }
 
-    private Usuario buscarPorDni(String dni) {
-        for (Usuario u : repoUsuarios.getLista()) {
-            System.out.println(u.getDni());
-            if (u.getDni().equalsIgnoreCase(dni)) {
-                return u;
-            }
-        }
-        return null;
-    }
-
     private void verUsuarios() {
         System.out.println("Resultados:");
         for (Usuario u : repoUsuarios.getLista()) {
@@ -77,7 +67,7 @@ public class GestionUsuarios {
         // pedir información de usuario
         String dni = preguntar("DNI: ");
 
-        Usuario usuarioExistente = buscarPorDni(dni);
+        Usuario usuarioExistente = repoUsuarios.buscarPorDni(dni);
         if (usuarioExistente != null) {
             System.out.println("Error: El usuario ya existe.");
             return;
@@ -99,7 +89,7 @@ public class GestionUsuarios {
         repoUsuarios.add(usuarioNuevo);
 
         // volcar memoria a archivo
-        if (repoUsuarios.guardarFicheroUsuarios()) {
+        if (repoUsuarios.guardarFichero()) {
             System.out.println("Usuario creado correctamente.");
         }
     }
@@ -108,7 +98,7 @@ public class GestionUsuarios {
         // pedir información de usuario
         String dni = preguntar("DNI: ");
 
-        Usuario usuarioExistente = buscarPorDni(dni);
+        Usuario usuarioExistente = repoUsuarios.buscarPorDni(dni);
         if (usuarioExistente == null) {
             System.out.println("Error: El usuario no existe.");
             return;
@@ -129,7 +119,7 @@ public class GestionUsuarios {
         usuarioExistente.setEdad(edad);
 
         // volcar memoria a archivo
-        if (repoUsuarios.guardarFicheroUsuarios()) {
+        if (repoUsuarios.guardarFichero()) {
             System.out.println("Usuario editado correctamente.");
         }
     }
@@ -138,7 +128,7 @@ public class GestionUsuarios {
         // pedir información de usuario
         String dni = preguntar("DNI: ");
 
-        Usuario usuarioExistente = buscarPorDni(dni);
+        Usuario usuarioExistente = repoUsuarios.buscarPorDni(dni);
         if (usuarioExistente == null) {
             System.out.println("Error: El usuario no existe.");
             return;
@@ -148,7 +138,7 @@ public class GestionUsuarios {
         repoUsuarios.remove(usuarioExistente);
 
         // volcar memoria a archivo
-        if (repoUsuarios.guardarFicheroUsuarios()) {
+        if (repoUsuarios.guardarFichero()) {
             System.out.println("Usuario eliminado correctamente.");
         }
     }

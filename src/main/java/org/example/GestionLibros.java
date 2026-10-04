@@ -20,7 +20,7 @@ public class GestionLibros {
                 "4) Eliminar Libro\n" +
                 "5) Menu Principal";
 
-        if (!repoLibros.cargarFicheroLibros()) {
+        if (!repoLibros.cargarFichero()) {
             System.out.println("Error: Fallo al cargar libros.");
             return;
         }
@@ -69,19 +69,6 @@ public class GestionLibros {
         return new Libro(titulo, autor, anyo);
     }
 
-    private Libro buscarLibro(Libro libro) {
-        for (Libro l : repoLibros.getLista()) {
-            // buscar primera coincidencia
-            if (l.getTitulo().equals(libro.getTitulo())
-                    && l.getAutor().equals(libro.getAutor())
-                    && l.getAnyo() == libro.getAnyo()
-            ) {
-                return l;
-            }
-        }
-        return null;
-    }
-
     private void verLibros() {
         System.out.println("Resultados:");
         for (Libro l : repoLibros.getLista()) {
@@ -99,7 +86,7 @@ public class GestionLibros {
         }
 
         // revisar si existía anteriormente
-        Libro libroExistente = buscarLibro(libroNuevo);
+        Libro libroExistente = repoLibros.buscarLibro(libroNuevo);
         if (libroExistente != null) {
             System.out.println("El libro ya existe.");
             return;
@@ -110,7 +97,7 @@ public class GestionLibros {
         repoLibros.add(libroNuevo);
 
         // volcar memoria a archivo
-        if (repoLibros.guardarFicheroLibros()) {
+        if (repoLibros.guardarFichero()) {
             System.out.println("Libro creado correctamente.");
         }
     }
@@ -125,7 +112,7 @@ public class GestionLibros {
         }
 
         // buscar libro en memoria
-        Libro libroExistente = buscarLibro(libroViejo);
+        Libro libroExistente = repoLibros.buscarLibro(libroViejo);
         if (libroExistente == null) {
             System.out.println("El libro no existe.");
             return;
@@ -133,19 +120,19 @@ public class GestionLibros {
 
         // pedir datos finales
         System.out.println("Introduce los valores actualizados.");
-        Libro libroNuevo = preguntarDatosLibro();
-        if (libroNuevo == null) {
+        Libro datosLibro = preguntarDatosLibro();
+        if (datosLibro == null) {
             System.out.println("Error: Fallo al conseguir los datos");
             return;
         }
 
         // actualizar en memoria
-        libroExistente.setAnyo(libroNuevo.getAnyo());
-        libroExistente.setAutor(libroNuevo.getAutor());
-        libroExistente.setTitulo(libroNuevo.getTitulo());
+        libroExistente.setAnyo(datosLibro.getAnyo());
+        libroExistente.setAutor(datosLibro.getAutor());
+        libroExistente.setTitulo(datosLibro.getTitulo());
 
         // volcar memoria a archivo
-        if (repoLibros.guardarFicheroLibros()) {
+        if (repoLibros.guardarFichero()) {
             System.out.println("Libro editado correctamente.");
         }
     }
@@ -159,7 +146,7 @@ public class GestionLibros {
         }
 
         // buscar libro en memoria
-        Libro libroExistente = buscarLibro(libroViejo);
+        Libro libroExistente = repoLibros.buscarLibro(libroViejo);
         if (libroExistente == null) {
             System.out.println("El libro no existe.");
             return;
@@ -169,7 +156,7 @@ public class GestionLibros {
         repoLibros.remove(libroExistente);
 
         // volcar memoria a archivo
-        if (repoLibros.guardarFicheroLibros()) {
+        if (repoLibros.guardarFichero()) {
             System.out.println("Libro eliminado correctamente.");
         }
     }
