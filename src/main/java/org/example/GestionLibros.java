@@ -3,6 +3,7 @@ package org.example;
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.security.AnyTypePermission;
 import org.example.modelos.Libro;
+import org.example.modelos.ListaLibros;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -20,7 +21,7 @@ public class GestionLibros {
     static XStream xstream = new XStream();
     static File fichero = new File("ficheros/libros.xml");
     static ListaLibros libros = new ListaLibros();
-    
+
     public GestionLibros() {
         final String MENU_LIBROS = "Acciones:\n" +
                 "1) Ver Libros\n" +
@@ -163,7 +164,8 @@ public class GestionLibros {
             return;
         }
 
-        // actualizar en memoria
+        // añadir a memoria
+        libroNuevo.setLibroId(libros.getLista().getLast().getLibroId() + 1);
         libros.add(libroNuevo);
 
         // volcar memoria a archivo

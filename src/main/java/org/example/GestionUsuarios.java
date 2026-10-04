@@ -155,8 +155,10 @@ public class GestionUsuarios {
             return;
         }
 
-        // añadir en memoria
-        usuarios.add(new Usuario(edad, dni, nombre));
+        // añadir a memoria
+        Usuario usuarioNuevo = new Usuario(edad, dni, nombre);
+        usuarioNuevo.setUsuarioId(usuarios.getLast().getUsuarioId() + 1);
+        usuarios.add(usuarioNuevo);
 
         // volcar memoria a archivo
         guardarFicheroUsuarios();

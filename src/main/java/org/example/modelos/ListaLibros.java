@@ -1,6 +1,4 @@
-package org.example;
-
-import org.example.modelos.Libro;
+package org.example.modelos;
 
 import java.util.ArrayList;
 import java.util.List;
