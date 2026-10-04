@@ -1,6 +1,6 @@
 package org.example;
 
-import static org.example.Main.scanner;
+import static org.example.EntradaDatos.preguntar;
 
 public class GestionLibros {
     public GestionLibros() {
@@ -15,10 +15,8 @@ public class GestionLibros {
         // Bucle de selección de acciones de menú.
         int opcion = -1;
         while (opcion != 5) {
-            System.out.print("\n\n" + MENU_LIBROS + "\n\nOpción: ");
-
             try {
-                opcion = Integer.parseInt(scanner.nextLine());
+                opcion = Integer.parseInt(preguntar("\n\n" + MENU_LIBROS + "\n\nOpción: "));
             } catch (NumberFormatException e) {
                 opcion = -1;
             }

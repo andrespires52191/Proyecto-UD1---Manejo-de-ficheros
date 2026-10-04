@@ -1,11 +1,10 @@
 package org.example;
 
 import java.io.File;
-import java.util.Scanner;
+
+import static org.example.EntradaDatos.preguntar;
 
 public class Main {
-    static Scanner scanner = new Scanner(System.in);
-
     static void main() {
         System.out.println("Gestión de Biblioteca\n" +
                 "---------------------");
@@ -35,10 +34,8 @@ public class Main {
         // Bucle de selección de acciones de menú.
         int opcion = -1;
         while (opcion != 4) {
-            System.out.print("\n" + MENU_PRINCIPAL + "\n\nOpción: ");
-
             try {
-                opcion = Integer.parseInt(scanner.nextLine());
+                opcion = Integer.parseInt(preguntar("\n" + MENU_PRINCIPAL + "\n\nOpción: "));
             } catch (NumberFormatException e) {
                 opcion = -1;
             }
