@@ -1,5 +1,6 @@
 package org.example;
 
+import java.io.File;
 import java.util.Scanner;
 
 public class Main {
@@ -8,6 +9,16 @@ public class Main {
     static void main() {
         System.out.println("Gestión de Biblioteca\n" +
                 "---------------------");
+
+        // Asegurarse de que la carpeta ficheros esta creada para poder usarla luego.
+        File carpeta = new File("ficheros");
+        carpeta.mkdirs();
+        // Queremos que exista, da igual si estaba creada
+        // o ha sido creada en la instrucción de arriba.
+        if (!carpeta.exists()) {
+            System.out.println("Error preparando inicio.");
+            return;
+        }
 
         menuPrincipal();
 
