@@ -1,5 +1,9 @@
 package org.example;
 
+import org.example.repos.RepoLibros;
+import org.example.repos.RepoPrestamos;
+import org.example.repos.RepoUsuarios;
+
 import java.io.File;
 
 import static org.example.EntradaDatos.preguntar;
@@ -19,12 +23,27 @@ public class Main {
             return;
         }
 
-        menuPrincipal();
+        // iniciar repositorios
+        RepoUsuarios repositorioUsuarios = new RepoUsuarios();
+        RepoLibros repositorioLibros = new RepoLibros();
+        RepoPrestamos repositorioPrestamos = new RepoPrestamos();
+
+        // iniciar servicios
+        GestionUsuarios gestionUsuarios = new GestionUsuarios(repositorioUsuarios);
+        GestionLibros gestionLibros = new GestionLibros(repositorioLibros);
+        GestionPrestamos gestionPrestamos = new GestionPrestamos(repositorioPrestamos,
+                repositorioUsuarios,
+                repositorioLibros);
+
+        // mostrar menus
+        menuPrincipal(gestionUsuarios, gestionLibros, gestionPrestamos);
 
         System.out.println("Programa terminado.");
     }
 
-    private static void menuPrincipal() {
+    private static void menuPrincipal(GestionUsuarios gestionUsuarios,
+                                      GestionLibros gestionLibros,
+                                      GestionPrestamos gestionPrestamos) {
         final String MENU_PRINCIPAL = "Acciones:\n" +
                 "1) Gestionar Usuarios\n" +
                 "2) Gestionar Libros\n" +
@@ -42,13 +61,13 @@ public class Main {
 
             switch (opcion) {
                 case 1:
-                    new GestionUsuarios();
+                    gestionUsuarios.mostrarMenu();
                     break;
                 case 2:
-                    new GestionLibros();
+                    gestionLibros.mostrarMenu();
                     break;
                 case 3:
-                    new GestionPrestamos();
+                    gestionPrestamos.mostrarMenu();
                     break;
                 case 4:
                     System.out.println("Saliendo...");

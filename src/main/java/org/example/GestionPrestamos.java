@@ -1,23 +1,27 @@
 package org.example;
 
-import com.google.gson.Gson;
-import org.example.modelos.ListaPrestamos;
 import org.example.modelos.Prestamo;
-
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.nio.charset.StandardCharsets;
+import org.example.repos.RepoLibros;
+import org.example.repos.RepoPrestamos;
+import org.example.repos.RepoUsuarios;
 
 import static org.example.EntradaDatos.preguntar;
 
 public class GestionPrestamos {
-    static Gson gson = new Gson();
-    static File fichero = new File("ficheros/prestamos.json");
-    static ListaPrestamos prestamos = new ListaPrestamos();
+    RepoPrestamos repoPrestamos;
+    RepoUsuarios repoUsuarios;
+    RepoLibros repoLibros;
 
     public GestionPrestamos() {
+    }
+
+    public GestionPrestamos(RepoPrestamos repoPrestamos, RepoUsuarios repoUsuarios, RepoLibros repoLibros) {
+        this.repoPrestamos = repoPrestamos;
+        this.repoUsuarios = repoUsuarios;
+        this.repoLibros = repoLibros;
+    }
+
+    public void mostrarMenu() {
         final String MENU_PRESTAMOS = "Acciones:\n" +
                 "1) Ver Prestamos\n" +
                 "2) Crear Prestamos\n" +
@@ -26,7 +30,7 @@ public class GestionPrestamos {
                 "5) Menu Principal";
 
 
-        if (!cargarFicheroPrestamos()) {
+        if (!repoPrestamos.cargarFicheroPrestamos()) {
             System.out.println("Error: Fallo al cargar préstamos.");
             return;
         }
@@ -62,60 +66,8 @@ public class GestionPrestamos {
         }
     }
 
-    private boolean cargarFicheroPrestamos() {
-        if (!fichero.exists()) {
-            // nada que cargar
-            return true;
-        }
-
-        try {
-            // abrir archivo
-            FileInputStream fis = new FileInputStream(fichero);
-
-            // leer contenido completo del archivo
-            String contenido = new String(fis.readAllBytes(), StandardCharsets.UTF_8);
-
-            // cerrar archivo
-            fis.close();
-
-            // deserializar y poner en memoria
-            prestamos = gson.fromJson(contenido, ListaPrestamos.class);
-
-            // éxito
-            return true;
-        } catch (IOException e) {
-            System.out.println("Error: " + e.getMessage());
-        }
-
-        // fallo
-        return false;
-    }
-
-    private boolean guardarFicheroPrestamos() {
-        // convertir lista a json
-        String json = gson.toJson(prestamos);
-        try {
-            // abrir archivo
-            FileOutputStream fos = new FileOutputStream(fichero);
-
-            // escribir json
-            fos.write(json.getBytes());
-
-            // cerrar archivo
-            fos.close();
-
-            // éxito
-            return true;
-        } catch (IOException e) {
-            System.out.println("Error: " + e.getMessage());
-        }
-
-        // fallo
-        return false;
-    }
-
     private Prestamo buscarPrestamoPorId(int prestamoId) {
-        for (Prestamo p : prestamos.getLista()) {
+        for (Prestamo p : repoPrestamos.getLista()) {
             if (p.getPrestamoId() == prestamoId) {
                 return p;
             }
@@ -124,7 +76,7 @@ public class GestionPrestamos {
     }
 
     private Prestamo buscarPrestamoPorUsuarioYLibro(int usuarioID, int libroID) {
-        for (Prestamo p : prestamos.getLista()) {
+        for (Prestamo p : repoPrestamos.getLista()) {
             if (p.getUsuarioId() == usuarioID && p.getLibroId() == libroID) {
                 return p;
             }
@@ -134,7 +86,7 @@ public class GestionPrestamos {
 
     private void verPrestamos() {
         System.out.println("Resultados:");
-        for (Prestamo p : prestamos.getLista()) {
+        for (Prestamo p : repoPrestamos.getLista()) {
             System.out.println("Préstamo#" + p.getPrestamoId() + " - " +
                     "Usuario#" + p.getUsuarioId() + " - " +
                     "Libro#" + p.getLibroId() + " - " +
@@ -166,11 +118,11 @@ public class GestionPrestamos {
         }
 
         // añadir a memoria
-        prestamoNuevo.setPrestamoId(prestamos.getLista().getLast().getPrestamoId() + 1);
-        prestamos.add(prestamoNuevo);
+        prestamoNuevo.setPrestamoId(repoPrestamos.getLastId() + 1);
+        repoPrestamos.add(prestamoNuevo);
 
         // volcar memoria a archivo
-        if (guardarFicheroPrestamos()) {
+        if (repoPrestamos.guardarFicheroPrestamos()) {
             System.out.println("Préstamo guardado correctamente.");
         }
     }
@@ -202,7 +154,7 @@ public class GestionPrestamos {
         prestamo.setFechaFin(fechaFin);
 
         // volcar a archivo
-        if (guardarFicheroPrestamos()) {
+        if (repoPrestamos.guardarFicheroPrestamos()) {
             System.out.println("Préstamo editado correctamente.");
         }
     }
@@ -225,10 +177,10 @@ public class GestionPrestamos {
         }
 
         // eliminar en memoria
-        prestamos.remove(prestamo);
+        repoPrestamos.remove(prestamo);
 
         // volcar a archivo
-        if (guardarFicheroPrestamos()) {
+        if (repoPrestamos.guardarFicheroPrestamos()) {
             System.out.println("Préstamo editado correctamente.");
         }
     }

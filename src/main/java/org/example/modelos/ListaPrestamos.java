@@ -12,12 +12,4 @@ public class ListaPrestamos {
     public List<Prestamo> getLista() {
         return lista;
     }
-
-    public boolean add(Prestamo prestamo) {
-        return lista.add(prestamo);
-    }
-
-    public boolean remove(Prestamo prestamo) {
-        return lista.remove(prestamo);
-    }
 }

@@ -1,18 +1,18 @@
 package org.example;
 
 import org.example.modelos.Usuario;
-
-import java.io.*;
-import java.util.ArrayList;
-import java.util.List;
+import org.example.repos.RepoUsuarios;
 
 import static org.example.EntradaDatos.preguntar;
 
 public class GestionUsuarios {
-    static File fichero = new File("ficheros/usuarios.dat");
-    static List<Usuario> usuarios = new ArrayList<>();
+    private final RepoUsuarios repoUsuarios;
 
-    public GestionUsuarios() {
+    public GestionUsuarios(RepoUsuarios repoUsuarios) {
+        this.repoUsuarios = repoUsuarios;
+    }
+
+    public void mostrarMenu() {
         final String MENU_USUARIO = "Acciones:\n" +
                 "1) Ver Usuarios\n" +
                 "2) Crear Usuario\n" +
@@ -20,7 +20,7 @@ public class GestionUsuarios {
                 "4) Eliminar Usuario\n" +
                 "5) Menu Principal";
 
-        if (!cargarFicheroUsuarios()) {
+        if (!repoUsuarios.cargarFicheroUsuarios()) {
             System.out.println("Error: Fallo al cargar usuarios.");
             return;
         }
@@ -56,70 +56,8 @@ public class GestionUsuarios {
         }
     }
 
-    private boolean cargarFicheroUsuarios() {
-        if (!fichero.exists()) {
-            // nada que cargar
-            return true;
-        }
-
-        try {
-            // abrir archivo
-            FileInputStream fis = new FileInputStream(fichero);
-            // preparar serializador de lectura
-            ObjectInputStream ois = new ObjectInputStream(fis);
-
-            while (true) {
-                try {
-                    // leer usuarios uno a uno
-                    Usuario usuario = (Usuario) ois.readObject();
-                    // poner en memoria
-                    usuarios.add(usuario);
-                } catch (EOFException e) {
-                    // fin de archivo
-                    break;
-                }
-            }
-
-            // cerrar archivo
-            ois.close();
-
-            // exito
-            return true;
-        } catch (IOException | ClassNotFoundException e) {
-            System.out.println("Error: " + e.getMessage());
-        }
-
-        // fallo
-        return false;
-    }
-
-    private boolean guardarFicheroUsuarios() {
-        try {
-            // abrir archivo
-            FileOutputStream fos = new FileOutputStream(fichero);
-            // preparar serializador de escritura
-            ObjectOutputStream oos = new ObjectOutputStream(fos);
-
-            for (Usuario u : usuarios) {
-                // guardar usuarios uno a uno
-                oos.writeObject(u);
-            }
-
-            // cerrar archivo
-            oos.close();
-
-            // exito
-            return true;
-        } catch (IOException e) {
-            System.out.println("Error: " + e.getMessage());
-        }
-
-        // fallo
-        return false;
-    }
-
     private Usuario buscarPorDni(String dni) {
-        for (Usuario u : usuarios) {
+        for (Usuario u : repoUsuarios.getLista()) {
             System.out.println(u.getDni());
             if (u.getDni().equalsIgnoreCase(dni)) {
                 return u;
@@ -130,7 +68,7 @@ public class GestionUsuarios {
 
     private void verUsuarios() {
         System.out.println("Resultados:");
-        for (Usuario u : usuarios) {
+        for (Usuario u : repoUsuarios.getLista()) {
             System.out.println(" - " + u);
         }
     }
@@ -157,11 +95,13 @@ public class GestionUsuarios {
 
         // añadir a memoria
         Usuario usuarioNuevo = new Usuario(edad, dni, nombre);
-        usuarioNuevo.setUsuarioId(usuarios.getLast().getUsuarioId() + 1);
-        usuarios.add(usuarioNuevo);
+        usuarioNuevo.setUsuarioId(repoUsuarios.getLastId() + 1);
+        repoUsuarios.add(usuarioNuevo);
 
         // volcar memoria a archivo
-        guardarFicheroUsuarios();
+        if (repoUsuarios.guardarFicheroUsuarios()) {
+            System.out.println("Usuario creado correctamente.");
+        }
     }
 
     private void editarUsuario() {
@@ -189,7 +129,7 @@ public class GestionUsuarios {
         usuarioExistente.setEdad(edad);
 
         // volcar memoria a archivo
-        if (guardarFicheroUsuarios()) {
+        if (repoUsuarios.guardarFicheroUsuarios()) {
             System.out.println("Usuario editado correctamente.");
         }
     }
@@ -205,10 +145,10 @@ public class GestionUsuarios {
         }
 
         // borrar en memoria
-        usuarios.remove(usuarioExistente);
+        repoUsuarios.remove(usuarioExistente);
 
         // volcar memoria a archivo
-        if (guardarFicheroUsuarios()) {
+        if (repoUsuarios.guardarFicheroUsuarios()) {
             System.out.println("Usuario eliminado correctamente.");
         }
     }

@@ -1,28 +1,18 @@
 package org.example;
 
-import com.thoughtworks.xstream.XStream;
-import com.thoughtworks.xstream.security.AnyTypePermission;
 import org.example.modelos.Libro;
-import org.example.modelos.ListaLibros;
-
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import org.example.repos.RepoLibros;
 
 import static org.example.EntradaDatos.preguntar;
 
 public class GestionLibros {
-    static {
-        // Force XStream to use PureJavaReflectionProvider globally
-        System.setProperty("xstream.converters.reflection.provider", "com.thoughtworks.xstream.converters.reflection.PureJavaReflectionProvider");
+    private final RepoLibros repoLibros;
+
+    public GestionLibros(RepoLibros repoLibros) {
+        this.repoLibros = repoLibros;
     }
 
-    static XStream xstream = new XStream();
-    static File fichero = new File("ficheros/libros.xml");
-    static ListaLibros libros = new ListaLibros();
-
-    public GestionLibros() {
+    public void mostrarMenu() {
         final String MENU_LIBROS = "Acciones:\n" +
                 "1) Ver Libros\n" +
                 "2) Crear Libro\n" +
@@ -30,7 +20,7 @@ public class GestionLibros {
                 "4) Eliminar Libro\n" +
                 "5) Menu Principal";
 
-        if (!cargarFicheroLibros()) {
+        if (!repoLibros.cargarFicheroLibros()) {
             System.out.println("Error: Fallo al cargar libros.");
             return;
         }
@@ -66,55 +56,6 @@ public class GestionLibros {
         }
     }
 
-    private boolean cargarFicheroLibros() {
-        if (!fichero.exists()) {
-            // nada que cargar
-            return true;
-        }
-
-        try {
-            // cambiar de nombre a las etiquetas XML
-            xstream.alias("ListaLibros", ListaLibros.class);
-            xstream.alias("DatosLibro", Libro.class);
-
-            // colección por defecto
-            xstream.addImplicitCollection(ListaLibros.class, "lista");
-
-            // cargar fichero a memoria
-            // necesita permisos para no dar error
-            xstream.addPermission(AnyTypePermission.ANY);
-            libros = (ListaLibros) xstream.fromXML(new FileInputStream(fichero));
-
-            // exito
-            return true;
-        } catch (IOException e) {
-            System.out.println("Error: " + e.getMessage());
-        }
-        // fallo
-        return false;
-    }
-
-    private boolean guardarFicheroLibros() {
-        try {
-            // cambiar de nombre a las etiquetas XML
-            xstream.alias("ListaLibros", ListaLibros.class);
-            xstream.alias("DatosLibro", Libro.class);
-
-            // colección por defecto
-            xstream.addImplicitCollection(ListaLibros.class, "lista");
-
-            // guardar
-            xstream.toXML(libros, new FileOutputStream(fichero));
-
-            // exito
-            return true;
-        } catch (IOException e) {
-            System.out.println("Error: " + e.getMessage());
-        }
-        // fallo
-        return false;
-    }
-
     private Libro preguntarDatosLibro() {
         String titulo = preguntar("Titulo: ");
         String autor = preguntar("Autor: ");
@@ -129,7 +70,7 @@ public class GestionLibros {
     }
 
     private Libro buscarLibro(Libro libro) {
-        for (Libro l : libros.getLista()) {
+        for (Libro l : repoLibros.getLista()) {
             // buscar primera coincidencia
             if (l.getTitulo().equals(libro.getTitulo())
                     && l.getAutor().equals(libro.getAutor())
@@ -143,7 +84,7 @@ public class GestionLibros {
 
     private void verLibros() {
         System.out.println("Resultados:");
-        for (Libro l : libros.getLista()) {
+        for (Libro l : repoLibros.getLista()) {
             System.out.println(l);
         }
         System.out.println();
@@ -165,11 +106,11 @@ public class GestionLibros {
         }
 
         // añadir a memoria
-        libroNuevo.setLibroId(libros.getLista().getLast().getLibroId() + 1);
-        libros.add(libroNuevo);
+        libroNuevo.setLibroId(repoLibros.getLastId() + 1);
+        repoLibros.add(libroNuevo);
 
         // volcar memoria a archivo
-        if (guardarFicheroLibros()) {
+        if (repoLibros.guardarFicheroLibros()) {
             System.out.println("Libro creado correctamente.");
         }
     }
@@ -204,7 +145,7 @@ public class GestionLibros {
         libroExistente.setTitulo(libroNuevo.getTitulo());
 
         // volcar memoria a archivo
-        if (guardarFicheroLibros()) {
+        if (repoLibros.guardarFicheroLibros()) {
             System.out.println("Libro editado correctamente.");
         }
     }
@@ -225,10 +166,10 @@ public class GestionLibros {
         }
 
         // borrar en memoria
-        libros.remove(libroExistente);
+        repoLibros.remove(libroExistente);
 
         // volcar memoria a archivo
-        if (guardarFicheroLibros()) {
+        if (repoLibros.guardarFicheroLibros()) {
             System.out.println("Libro eliminado correctamente.");
         }
     }

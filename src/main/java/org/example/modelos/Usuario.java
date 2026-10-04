@@ -3,7 +3,7 @@ package org.example.modelos;
 import java.io.Serializable;
 
 public class Usuario implements Serializable {
-    String usuarioId;
+    int usuarioId;
     String nombre;
     String dni;
     int edad;
@@ -14,11 +14,11 @@ public class Usuario implements Serializable {
         this.nombre = nombre;
     }
 
-    public String getUsuarioId() {
+    public int getUsuarioId() {
         return usuarioId;
     }
 
-    public void setUsuarioId(String usuarioId) {
+    public void setUsuarioId(int usuarioId) {
         this.usuarioId = usuarioId;
     }
 
