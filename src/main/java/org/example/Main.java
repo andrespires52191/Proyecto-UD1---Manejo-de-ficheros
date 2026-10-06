@@ -24,16 +24,30 @@ public class Main {
         }
 
         // iniciar repositorios
-        RepoUsuarios repositorioUsuarios = new RepoUsuarios();
-        RepoLibros repositorioLibros = new RepoLibros();
-        RepoPrestamos repositorioPrestamos = new RepoPrestamos();
+        RepoUsuarios repoUsuarios = new RepoUsuarios();
+        if (!repoUsuarios.cargarFichero()) {
+            System.out.println("Error: Fallo al cargar usuarios.");
+            return;
+        }
+
+        RepoLibros repoLibros = new RepoLibros();
+        if (!repoLibros.cargarFichero()) {
+            System.out.println("Error: Fallo al cargar libros.");
+            return;
+        }
+
+        RepoPrestamos repoPrestamos = new RepoPrestamos();
+        if (!repoPrestamos.cargarFichero()) {
+            System.out.println("Error: Fallo al cargar préstamos.");
+            return;
+        }
 
         // iniciar servicios
-        GestionUsuarios gestionUsuarios = new GestionUsuarios(repositorioUsuarios);
-        GestionLibros gestionLibros = new GestionLibros(repositorioLibros);
-        GestionPrestamos gestionPrestamos = new GestionPrestamos(repositorioPrestamos,
-                repositorioUsuarios,
-                repositorioLibros);
+        GestionUsuarios gestionUsuarios = new GestionUsuarios(repoUsuarios);
+        GestionLibros gestionLibros = new GestionLibros(repoLibros);
+        GestionPrestamos gestionPrestamos = new GestionPrestamos(repoPrestamos,
+                repoUsuarios,
+                repoLibros);
 
         // mostrar menus
         menuPrincipal(gestionUsuarios, gestionLibros, gestionPrestamos);

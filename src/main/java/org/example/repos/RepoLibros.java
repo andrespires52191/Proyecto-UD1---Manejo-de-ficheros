@@ -86,6 +86,17 @@ public class RepoLibros {
         return getLista().remove(libro);
     }
 
+    public Libro buscarPorId(int libroId) {
+        List<Libro> lista = getLista();
+        for (int i = 0; i < lista.size(); i++) {
+            Libro libro = lista.get(i);
+            if (libro.getLibroId() == libroId) {
+                return libro;
+            }
+        }
+        return null;
+    }
+
     public Libro buscarLibro(Libro libro) {
         for (Libro l : getLista()) {
             // buscar primera coincidencia

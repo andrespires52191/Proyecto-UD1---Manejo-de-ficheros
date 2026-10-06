@@ -20,11 +20,6 @@ public class GestionLibros {
                 "4) Eliminar Libro\n" +
                 "5) Menu Principal";
 
-        if (!repoLibros.cargarFichero()) {
-            System.out.println("Error: Fallo al cargar libros.");
-            return;
-        }
-
         // Bucle de selección de acciones de menú.
         int opcion = -1;
         while (opcion != 5) {
@@ -53,6 +48,7 @@ public class GestionLibros {
                 default:
                     System.out.println("Error. Intenta de nuevo.");
             }
+            System.out.println();
         }
     }
 
@@ -72,9 +68,8 @@ public class GestionLibros {
     private void verLibros() {
         System.out.println("Resultados:");
         for (Libro l : repoLibros.getLista()) {
-            System.out.println(l);
+            System.out.println(" - " + l);
         }
-        System.out.println();
     }
 
     private void cearLibro() {

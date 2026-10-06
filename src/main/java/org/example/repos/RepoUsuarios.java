@@ -93,6 +93,17 @@ public class RepoUsuarios {
         getLista().remove(usuario);
     }
 
+    public Usuario buscarPorId(int usuarioId) {
+        List<Usuario> lista = getLista();
+        for (int i = 0; i < lista.size(); i++) {
+            Usuario usuario = lista.get(i);
+            if (usuario.getUsuarioId() == usuarioId) {
+                return usuario;
+            }
+        }
+        return null;
+    }
+
     public Usuario buscarPorDni(String dni) {
         for (Usuario u : getLista()) {
             if (u.getDni().equalsIgnoreCase(dni)) {

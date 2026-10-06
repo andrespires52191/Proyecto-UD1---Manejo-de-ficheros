@@ -20,11 +20,6 @@ public class GestionUsuarios {
                 "4) Eliminar Usuario\n" +
                 "5) Menu Principal";
 
-        if (!repoUsuarios.cargarFichero()) {
-            System.out.println("Error: Fallo al cargar usuarios.");
-            return;
-        }
-
         // Bucle de selección de acciones de menú.
         int opcion = -1;
         while (opcion != 5) {
@@ -53,6 +48,7 @@ public class GestionUsuarios {
                 default:
                     System.out.println("Error. Intenta de nuevo.");
             }
+            System.out.println();
         }
     }
 

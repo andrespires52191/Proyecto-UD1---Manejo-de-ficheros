@@ -12,9 +12,6 @@ public class GestionPrestamos {
     RepoUsuarios repoUsuarios;
     RepoLibros repoLibros;
 
-    public GestionPrestamos() {
-    }
-
     public GestionPrestamos(RepoPrestamos repoPrestamos, RepoUsuarios repoUsuarios, RepoLibros repoLibros) {
         this.repoPrestamos = repoPrestamos;
         this.repoUsuarios = repoUsuarios;
@@ -28,12 +25,6 @@ public class GestionPrestamos {
                 "3) Editar Prestamos\n" +
                 "4) Eliminar Prestamos\n" +
                 "5) Menu Principal";
-
-
-        if (!repoPrestamos.cargarFichero()) {
-            System.out.println("Error: Fallo al cargar préstamos.");
-            return;
-        }
 
         // Bucle de selección de acciones de menú.
         int opcion = -1;
@@ -63,18 +54,17 @@ public class GestionPrestamos {
                 default:
                     System.out.println("Error. Intenta de nuevo.");
             }
+            System.out.println();
         }
     }
 
     private void verPrestamos() {
         System.out.println("Resultados:");
         for (Prestamo p : repoPrestamos.getLista()) {
-            System.out.println("Préstamo#" + p.getPrestamoId() + " - " +
-                    "Usuario#" + p.getUsuarioId() + " - " +
-                    "Libro#" + p.getLibroId() + " - " +
-                    "(" + p.getFechaIni() + " - " + p.getFechaFin() + ")");
+            System.out.println("Préstamo: #" + p.getPrestamoId() + ", Inicio " + p.getFechaIni() + ", Fin " + p.getFechaFin() +
+                    "\n\tUsuario: #" + p.getUsuarioId() + " - " + repoUsuarios.buscarPorId(p.getUsuarioId()) +
+                    "\n\tLibro: #" + p.getLibroId() + " - " + repoLibros.buscarPorId(p.getLibroId()));
         }
-        System.out.println();
     }
 
     private void cearPrestamo() {
