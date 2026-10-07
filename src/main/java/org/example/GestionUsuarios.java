@@ -92,7 +92,7 @@ public class GestionUsuarios {
 
     private void editarUsuario() {
         // pedir información de usuario
-        String dni = preguntar("DNI: ");
+        String dni = preguntar("DNI del usuario a editar: ");
 
         Usuario usuarioExistente = repoUsuarios.buscarPorDni(dni);
         if (usuarioExistente == null) {

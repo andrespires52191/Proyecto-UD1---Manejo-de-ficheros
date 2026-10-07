@@ -99,7 +99,7 @@ public class GestionLibros {
 
     private void editarLibro() {
         // pedir datos para la búsqueda
-        System.out.println("Introduce los valores antiguos.");
+        System.out.println("Introduce los valores antiguos del libro a editar.");
         Libro libroViejo = preguntarDatosLibro();
         if (libroViejo == null) {
             System.out.println("Error: Fallo al conseguir los datos");
@@ -114,7 +114,7 @@ public class GestionLibros {
         }
 
         // pedir datos finales
-        System.out.println("Introduce los valores actualizados.");
+        System.out.println("Introduce los valores nuevos del libro que se está editando.");
         Libro datosLibro = preguntarDatosLibro();
         if (datosLibro == null) {
             System.out.println("Error: Fallo al conseguir los datos");

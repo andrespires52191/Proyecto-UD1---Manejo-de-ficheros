@@ -103,7 +103,7 @@ public class GestionPrestamos {
         // pedir datos de búsqueda
         int prestamoId = -1;
         try {
-            prestamoId = Integer.parseInt(EntradaDatos.preguntar("ID de préstamo: "));
+            prestamoId = Integer.parseInt(EntradaDatos.preguntar("ID del préstamo a editar: "));
         } catch (NumberFormatException e) {
             System.out.println("Error al recoger ID.");
             return;
